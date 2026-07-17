@@ -96,11 +96,27 @@ galleryElement.addEventListener('click', event => {
   const largeSrc = image.dataset.source;
   const altText = image.alt;
 
-  const modal = basicLightbox.create(`
+  const modal = basicLightbox.create(
+    `
     <div class="lightbox-wrapper">
       <img src="${largeSrc}" alt="${altText}" />
     </div>
-  `);
+  `,
+    {
+      onShow: instance => {
+        document.addEventListener('keydown', onEsc);
+      },
+      onClose: instance => {
+        document.removeEventListener('keydown', onEsc);
+      },
+    }
+  );
+
+  function onEsc(event) {
+    if (event.key === 'Escape') {
+      modal.close();
+    }
+  }
 
   modal.show();
 });
